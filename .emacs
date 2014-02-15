@@ -1,5 +1,6 @@
 
-(add-to-list 'load-path "C:/Users/Jacob/.emacs.d/site-lisp")
+(add-to-list 'load-path "~/.emacs.d/site-lisp")
+(add-to-list 'load-path "C:/Users/jacob/.emacs.d/site-lisp")
 
 (show-paren-mode 1)
 (setq-default inhibit-splash-screen t)
@@ -23,6 +24,8 @@
 
 (global-set-key (kbd "C-<tab>") 'other-window)
 
+(require 'color-theme)
+(color-theme-initialize)
 (load "color-theme-sunburst.el")
 (color-theme-tm)
 
