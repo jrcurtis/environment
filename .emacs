@@ -13,10 +13,6 @@
 (setq-default doc-view-continuous t)
 (tool-bar-mode 0)
 
-(global-hl-line-mode 1)
-(set-face-background 'highlight "#121")
-(set-face-foreground 'highlight nil)
-
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -28,6 +24,10 @@
 (color-theme-initialize)
 (load "color-theme-sunburst.el")
 (color-theme-tm)
+
+(global-hl-line-mode 1)
+(custom-set-faces
+ '(highlight ((t (:background "#121" :foreground nil )))))
 
 (require 'smooth-scroll)
 (smooth-scroll-mode t)
@@ -79,7 +79,7 @@
 
 (autoload 'scss-mode "scss-mode")
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
-(setq-default scss-sass-command "compass compile #")
+(setq-default scss-sass-command "compass compile .. #")
 
 (load "aj-compilation.el")
 
