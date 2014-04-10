@@ -11,6 +11,7 @@
 (setq-default column-number-mode t)
 (setq-default fill-column 80)
 (setq-default doc-view-continuous t)
+(setq-default default-buffer-file-coding-system 'utf-8-unix)
 (tool-bar-mode 0)
 
 (require 'recentf)
@@ -24,10 +25,6 @@
 (color-theme-initialize)
 (load "color-theme-sunburst.el")
 (color-theme-tm)
-
-(global-hl-line-mode 1)
-(custom-set-faces
- '(highlight ((t (:background "#121" :foreground nil )))))
 
 (require 'smooth-scroll)
 (smooth-scroll-mode t)
@@ -86,6 +83,15 @@
 (when (boundp 'aquamacs-version)
   (unload-feature 'aquamacs-tabbar t)
   (unload-feature 'tabbar t))
+
+(global-hl-line-mode 1)
+(custom-set-faces
+ '(highlight ((t (:background "#121" :foreground nil :slant normal :weight normal)))))
+(custom-set-faces
+ '(highline-face ((t (:background "#121" :foreground nil :slant normal :weight normal)))))
+(custom-set-faces
+ '(hl-line ((t (:background "#121" :foreground nil :slant normal :weight normal)))))
+
 
 
 
