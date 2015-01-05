@@ -14,6 +14,16 @@
 (setq-default default-buffer-file-coding-system 'utf-8-unix)
 (tool-bar-mode 0)
 
+(defun escape-string (str)
+  (if (stringp str)
+      (replace-in-string "\"" "\\\"" str)
+    ""))
+
+(defun wrap-string (wrapper str)
+  (if (listp wrapper)
+      (concat (first wrapper) str (last wrapper))
+    (concat wrapper str wrapper)))
+
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -26,8 +36,6 @@
 (load "color-theme-sunburst.el")
 (color-theme-tm)
 
-(require 'smooth-scroll)
-(smooth-scroll-mode t)
 (global-set-key (kbd "C-S-n") #'(lambda ()
                                   (interactive)
                                   (next-line)
@@ -71,6 +79,18 @@
       '(("django" . "\\.html\\'")))
 (rassq-delete-all 'html-helper-mode magic-mode-alist)
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+
+(require 'org)
+(setq org-log-done t)
+(setq org-use-fast-todo-selection t)
+(setq org-directory "~/Dropbox/org")
+(setq org-default-notes-file "~/Dropbox/org/jacob.org")
+(setq org-agenda-files (list "~/Dropbox/org/jacob.org"))
+(setq org-archive-location "~/Dropbox/org/jacob_archive.org")
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-cc" 'org-capture)
+(load-file (concat org-directory "/helpers/org.el"))
 
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
