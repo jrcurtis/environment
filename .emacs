@@ -25,6 +25,7 @@
   (setq auto-save-file-name-transforms
         '((".*" "d:/.emacs.d/backup" t))))
 
+
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -37,8 +38,6 @@
 
 (require 'htmlize)
 
-(require 'smooth-scroll)
-(smooth-scroll-mode t)
 (global-set-key (kbd "C-S-n") #'(lambda ()
                                   (interactive)
                                   (next-line)
@@ -88,6 +87,18 @@
       '(("django" . "\\.html\\'")))
 (rassq-delete-all 'html-helper-mode magic-mode-alist)
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+
+(require 'org)
+(setq org-log-done t)
+(setq org-use-fast-todo-selection t)
+(setq org-directory "~/Dropbox/org")
+(setq org-default-notes-file "~/Dropbox/org/jacob.org")
+(setq org-agenda-files (list "~/Dropbox/org/jacob.org"))
+(setq org-archive-location "~/Dropbox/org/jacob_archive.org")
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-cc" 'org-capture)
+(load-file (concat org-directory "/helpers/org.el"))
 
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
