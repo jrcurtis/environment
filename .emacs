@@ -1,6 +1,11 @@
 
-(add-to-list 'load-path "~/.emacs.d/site-lisp")
-(add-to-list 'load-path "C:/Users/jacob/.emacs.d/site-lisp")
+(if (boundp 'aquamacs-version)
+    (progn
+      (add-to-list 'load-path "~/.emacs.d/site-lisp")
+      (add-to-list 'custom-theme-load-path "~/.emacs.d/themes"))
+  (progn
+    (add-to-list 'load-path "C:/Users/jacob/.emacs.d/site-lisp")
+    (add-to-list 'custom-theme-load-path "C:/Users/jacob/.emacs.d/themes")))
 
 (show-paren-mode 1)
 (setq-default inhibit-splash-screen t)
@@ -14,6 +19,12 @@
 (setq-default default-buffer-file-coding-system 'utf-8-unix)
 (tool-bar-mode 0)
 
+(when (not (boundp 'aquamacs-version))
+  (setq backup-directory-alist
+        '((".*" . "d:/.emacs.d/backup")))
+  (setq auto-save-file-name-transforms
+        '((".*" "d:/.emacs.d/backup" t))))
+
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -21,10 +32,10 @@
 
 (global-set-key (kbd "C-<tab>") 'other-window)
 
-(require 'color-theme)
-(color-theme-initialize)
-(load "color-theme-sunburst.el")
-(color-theme-tm)
+(load-theme 'tomorrow-night-paradise t)
+(global-hl-line-mode 1)
+
+(require 'htmlize)
 
 (require 'smooth-scroll)
 (smooth-scroll-mode t)
@@ -57,6 +68,9 @@
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.glsl\\'" . c-mode))
 
+(require 'actionscript-mode)
+(add-to-list 'auto-mode-alist '("\\.as\\'" . actionscript-mode))
+
 (require 'csharp-mode)
 (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-mode))
 
@@ -65,6 +79,9 @@
 
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-mode))
+
+(require 'haxe-mode)
+(add-to-list 'auto-mode-alist '("\\.hx\\'" . haxe-mode))
 
 (require 'web-mode)
 (setq web-mode-engines-alist
@@ -78,19 +95,25 @@
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 (setq-default scss-sass-command "compass compile .. #")
 
+(require 'lua-mode)
+(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
+(setq-default lua-indent-level 4)
+
 (load "aj-compilation.el")
+
+(electric-indent-mode -1)
+(add-hook 'after-change-major-mode-hook
+          (lambda ()
+            (setq electric-indent-inhibit t)
+            (setq electric-indent-local-mode -1)
+            (electric-indent-mode -1)))
 
 (when (boundp 'aquamacs-version)
   (unload-feature 'aquamacs-tabbar t)
   (unload-feature 'tabbar t))
 
-(global-hl-line-mode 1)
-(custom-set-faces
- '(highlight ((t (:background "#121" :foreground nil :slant normal :weight normal)))))
-(custom-set-faces
- '(highline-face ((t (:background "#121" :foreground nil :slant normal :weight normal)))))
-(custom-set-faces
- '(hl-line ((t (:background "#121" :foreground nil :slant normal :weight normal)))))
+
+
 
 
 
