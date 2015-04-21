@@ -12,7 +12,9 @@
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers '()
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(evil-search-highlight-persist
+                                    smartparens
+                                    yasnippet)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'
@@ -99,15 +101,67 @@ before layers configuration."
    dotspacemacs-default-package-repository nil)
   ;; User initialization goes here
   (setq-default
-   evil-search-highlight-persist nil
-   truncate-lines t)
+   truncate-lines t
+   golden-ratio-adjust-factor 0.8
+   golden-ratio-wide-adjust-factor 0.8
+   ac-auto-show-menu nil
+   ac-use-quick-help nil
+   evil-move-cursor-back nil)
+
+  ;; C Indentation
+  (defconst my-c-style
+    '((c-tab-always-indent        . t)
+      (c-comment-only-line-offset . 4)
+      (c-basic-offset . 4)
+      (c-offsets-alist . ((substatement-open . 0)
+                          (inline-open . 0)
+                          (comment-intro . 0)
+                          (cpp-macro . 0)
+                          (case-label . +)
+                          (innamespace . +)))
+      (c-echo-syntactic-information-p . nil)))
+  (c-add-style "my-c-style" my-c-style)
+  (setq c-default-style "my-c-style")
+
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.hx\\'" . java-mode))
+
   )
 
 (defun dotspacemacs/config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  (add-hook 'after-change-major-mode-hook
+            (lambda ()
+              (fci-mode 1)
+              (setq electric-indent-inhibit t)
+              (electric-indent-local-mode -1)
+              (smartparens-mode -1)
+              ))
+  (add-hook 'ac-mode-hook
+            (lambda ()
+                (define-key ac-completing-map "\C-j" 'ac-next)
+                (define-key ac-completing-map "\C-k" 'ac-previous)))
+  (defun my-brace-func ()
+    (interactive)
+    (newline)
+    (insert-char ?{)
+    (indent-according-to-mode)
+    (newline)
+      (save-excursion
+        (newline)
+        (insert-char ?})
+        (indent-according-to-mode))
+      (indent-according-to-mode)
+    )
+  (define-key evil-insert-state-map "\M-[" 'my-brace-func)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+
+
+
+
+
