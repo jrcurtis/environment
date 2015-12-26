@@ -10,11 +10,13 @@
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
-   dotspacemacs-configuration-layers '()
+   dotspacemacs-configuration-layers '(csharp markdown org)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(evil-search-highlight-persist
                                     smartparens
-                                    yasnippet)
+                                    yasnippet
+                                    highlight-parentheses
+                                    )
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'
@@ -98,7 +100,17 @@ before layers configuration."
    ;; The default package repository used if no explicit repository has been
    ;; specified with an installed package.
    ;; Not used for now.
-   dotspacemacs-default-package-repository nil)
+   dotspacemacs-default-package-repository nil
+
+   dotspacemacs-editing-style 'vim
+
+   dotspacemacs-emacs-leader-key "M-m"
+
+   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+
+   dotspacemacs-highlight-delimiters 'any
+   )
+
   ;; User initialization goes here
   (setq-default
    truncate-lines t
@@ -118,26 +130,31 @@ before layers configuration."
                           (comment-intro . 0)
                           (cpp-macro . 0)
                           (case-label . +)
+                          (inclass . +)
                           (innamespace . +)))
       (c-echo-syntactic-information-p . nil)))
   (c-add-style "my-c-style" my-c-style)
-  (setq c-default-style "my-c-style")
+  (setq-default c-default-style "my-c-style")
 
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.hx\\'" . java-mode))
 
+  (setq debug-on-error t)
+
   )
 
-(defun dotspacemacs/config ()
+(defun dotspacemacs/user-config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
   (add-hook 'after-change-major-mode-hook
             (lambda ()
-              (fci-mode 1)
+              ;;(fci-mode 1) ;; broken as hell
               (setq electric-indent-inhibit t)
               (electric-indent-local-mode -1)
               (smartparens-mode -1)
+              (custom-set-faces
+               '(trailing-whitespace ((t (:background nil)))))
               ))
   (add-hook 'ac-mode-hook
             (lambda ()
@@ -156,6 +173,11 @@ layers configuration."
       (indent-according-to-mode)
     )
   (define-key evil-insert-state-map "\M-[" 'my-brace-func)
+
+  (global-auto-revert-mode t)
+
+  (setq org-bullets-bullet-list '("😀" "😐" "😟" "💀"))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -165,3 +187,26 @@ layers configuration."
 
 
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ahs-case-fold-search nil)
+ '(ahs-default-range (quote ahs-range-whole-buffer))
+ '(ahs-idle-interval 0.25)
+ '(ahs-idle-timer 0 t)
+ '(ahs-inhibit-face-list nil)
+ '(fci-handle-line-move-visual nil)
+ '(fci-handle-truncate-lines nil)
+ '(fci-rule-color "#D0BF8F" t)
+ '(global-whitespace-mode nil)
+ '(ring-bell-function (quote ignore) t)
+ '(show-trailing-whitespace nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C"))))
+ '(trailing-whitespace ((t (:background nil)))))
